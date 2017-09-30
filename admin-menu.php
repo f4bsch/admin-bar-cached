@@ -1,11 +1,10 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: Fabian
- * Date: 24.09.2017
- * Time: 16:04
- */
+* Caching the menu is experimental and does not work properly yet.
+* Put define('ADMIN_BAR_CACHED_EXPERIMENTAL_MENU', true); in your wp-config.php to test it
+*/
+
 class AdminMenuCache {
 	static function adminMenuPre() {
 		global $wp_filter;

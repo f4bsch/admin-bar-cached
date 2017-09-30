@@ -1,10 +1,13 @@
 <?php
 /*
-Plugin Name: Admin Bar Cached
-Description: Caches the Admin Menu Bar to speedup your site
+Plugin Name: Toolbar Cached
+Description: Caches the Toolbar to speedup your site
 Version: 0.1.0
 Author: Fabian Schlieper
 Author URI: https://fabi.me/
+License:      GPL2
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+GitHub Plugin URI: f4bsch/admin-bar-cached
 */
 
 defined( 'ABSPATH' ) or exit;

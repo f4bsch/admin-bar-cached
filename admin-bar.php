@@ -19,7 +19,7 @@ class AdminBarCached {
 
 		echo $barHtml;
 
-		$t = round((microtime(true) - $t) * 1000,2);
+		$t = round((microtime(true) - $t) * 1000,0);
 
 		$insertAt = strrpos($barHtml, '</ul>');
 		$insert = "<li id='' class='menupop'>$t ms</li>";
