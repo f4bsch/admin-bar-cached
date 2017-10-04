@@ -47,13 +47,14 @@ class AdminBarCachePlugin {
 
 
 		// caching the admin menu is experimental!
-		if ( defined('ADMIN_BAR_CACHED_EXPERIMENTAL_MENU') ) {
+		if ( defined( 'ADMIN_BAR_CACHED_EXPERIMENTAL_MENU' ) ) {
 			require_once self::$path . 'admin-menu.php';
 			add_action( '_admin_menu', array( 'AdminMenuCache', 'adminMenuPre' ), 1e9 );
 		}
 
 		// caching scripts is experimental!
-		if ( defined('ADMIN_BAR_CACHED_EXPERIMENTAL_SCRIPTS') ) {
+		if ( defined( 'ADMIN_BAR_CACHED_EXPERIMENTAL_SCRIPTS' ) ) {
+			// wp_default_scripts	wp_default_scripts	wpcore/script-loader	     1	     0	     0	     65 KiB	     53 KiB	   2.91 ms
 
 			remove_action( 'wp_default_scripts', 'wp_default_scripts' );
 			add_action( 'wp_default_scripts', array( __CLASS__, 'wpDefaultScripts' ) );
@@ -86,9 +87,29 @@ class AdminBarCachePlugin {
 
 
 	static function getCacheKey( $for = 'bar', $appendRequestUrl = false ) {
+		/**
+		 * @global WP_Query $wp_query
+		 */
+		global $wp_query;
+
+		$e = ( + is_admin() ) . ( + is_network_admin() );
+
+		if ( $wp_query ) {
+			$e .= ( + is_singular() );
+			if ( ( $qobj = $wp_query->get_queried_object() ) ) {
+				$class = get_class( $qobj );
+				$e     .= $class;
+				if ( $class === 'WP_Post' ) {
+					/** @var $qobj WP_Post */
+					$e .= $qobj->post_type;
+				}
+			}
+		}
 		$userId = wp_get_current_user()->ID;
 
-		return "admin_bar_cached_{$for}_u{$userId}_a" . is_admin() . "_na" . is_network_admin() . ( $appendRequestUrl ? $_SERVER['PHP_SELF'] : '' );
+		//echo "<script>console.log('CACHE KEY EXTRA: $e');</script>'";
+
+		return "admin_bar_cached_{$for}_u{$userId}_$e" . ( $appendRequestUrl ? $_SERVER['PHP_SELF'] : '' );
 	}
 
 	static function flush( $valueFromFilter = null ) {
